@@ -1,15 +1,6 @@
 ﻿namespace OakLab.HexGeometry;
 
-public class HexagonalGraphEdge
+public record HexagonalGraphEdge(CubeCoordinates Start, CubeCoordinates End, decimal Weight)
 {
-    public HexagonalGraphEdge(CubeCoordinates start, CubeCoordinates end, decimal weight)
-    {
-        Start = start;
-        End = end;
-        Weight = weight;
-    }
-
-    public CubeCoordinates Start { get; }
-    public CubeCoordinates End { get; }
-    public decimal Weight { get; set; }
+    public decimal Weight { get; set; } = Weight;
 }

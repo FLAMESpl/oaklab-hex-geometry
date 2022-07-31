@@ -9,48 +9,32 @@ public static class HexGridCoordinatesExtensions
         return (Math.Abs(x) + Math.Abs(y) + Math.Abs(z)) / 2;
     }
 
+    public static IEnumerable<TCoordinates> GetDiagonalNeighbours<TCoordinates>(this TCoordinates coordinates)
+        where TCoordinates : struct, IHexGridCoordinates<TCoordinates>
+    {
+        var cubeCoordinates = coordinates.ConvertToCube();
+        return CubeCoordinates.DiagonalNeighbourVectors
+            .Select(vector => default(TCoordinates).ConvertFrom(cubeCoordinates + vector));
+    }
+
     public static bool IsDiagonallyNeighbouringWith<TCoordinates>(this TCoordinates first, CubeCoordinates second)
         where TCoordinates : struct, IHexGridCoordinates<TCoordinates>
     {
-        ReadOnlySpan<CubeCoordinates> vectors = stackalloc CubeCoordinates[6]
-        {
-            new CubeCoordinates(2, -1, -1),
-            new CubeCoordinates(-1, 2, -1),
-            new CubeCoordinates(-1, -1, 2),
-            new CubeCoordinates(-2, 1, 1),
-            new CubeCoordinates(1, -2, 1),
-            new CubeCoordinates(1, 1, -2)
-        };
+        return GetDiagonalNeighbours(first.ConvertToCube()).Any(neighbour => neighbour == second);
+    }
 
-        var cubeFirst = first.ConvertToCube();
-
-        foreach (var vector in vectors)
-            if (cubeFirst + vector == second)
-                return true;
-
-        return false;
+    public static IEnumerable<TCoordinates> GetNeighbours<TCoordinates>(this TCoordinates coordinates)
+        where TCoordinates : struct, IHexGridCoordinates<TCoordinates>
+    {
+        var cubeCoordinates = coordinates.ConvertToCube();
+        return CubeCoordinates.NeighbourVectors
+            .Select(vector => default(TCoordinates).ConvertFrom(cubeCoordinates + vector));
     }
 
     public static bool IsNeighbouringWith<TCoordinates>(this TCoordinates first, CubeCoordinates second)
         where TCoordinates : struct, IHexGridCoordinates<TCoordinates>
     {
-        ReadOnlySpan<CubeCoordinates> vectors = stackalloc CubeCoordinates[6]
-        {
-            new CubeCoordinates(1, 0, -1),
-            new CubeCoordinates(1, -1, 0),
-            new CubeCoordinates(0, -1, 1),
-            new CubeCoordinates(-1, 0, 1),
-            new CubeCoordinates(-1, 1, 0),
-            new CubeCoordinates(0, 1, -1)
-        };
-
-        var cubeFirst = first.ConvertToCube();
-
-        foreach (var vector in vectors)
-            if (cubeFirst + vector == second)
-                return true;
-
-        return false;
+        return GetNeighbours(first.ConvertToCube()).Any(neighbour => neighbour == second);
     }
 
     public static IEnumerable<TCoordinates> LineTo<TCoordinates>(this TCoordinates from, CubeCoordinates to)

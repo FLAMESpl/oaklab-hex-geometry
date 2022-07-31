@@ -2,6 +2,26 @@
 
 public readonly record struct CubeCoordinates(int X, int Y, int Z) : IHexGridCoordinates<CubeCoordinates>
 {
+    internal static readonly IEnumerable<CubeCoordinates> DiagonalNeighbourVectors = new[]
+    {
+        new CubeCoordinates(2, -1, -1),
+        new CubeCoordinates(-1, 2, -1),
+        new CubeCoordinates(-1, -1, 2),
+        new CubeCoordinates(-2, 1, 1),
+        new CubeCoordinates(1, -2, 1),
+        new CubeCoordinates(1, 1, -2)
+    };
+
+    internal static readonly IEnumerable<CubeCoordinates> NeighbourVectors = new[]
+    {
+        new CubeCoordinates(1, 0, -1),
+        new CubeCoordinates(1, -1, 0),
+        new CubeCoordinates(0, -1, 1),
+        new CubeCoordinates(-1, 0, 1),
+        new CubeCoordinates(-1, 1, 0),
+        new CubeCoordinates(0, 1, -1)
+    };
+
     public CubeCoordinates Minus(CubeCoordinates other)
     {
         return new CubeCoordinates(X - other.X, Y - other.Y, Z - other.Z);

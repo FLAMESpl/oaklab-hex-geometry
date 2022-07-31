@@ -82,4 +82,6 @@ public class HexagonalGraph
             yield return default(TCoordinates).ConvertFrom(previous);
         }
     }
+
+    public static HexagonalGraph CreateEmpty() => new(Array.Empty<HexagonalGraphEdge>());
 }

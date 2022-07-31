@@ -10,7 +10,7 @@ public record HexModel(float EdgeSize, HexOrientation Orientation)
         ? squareRootOfThree * EdgeSize
         : 2 * EdgeSize;
 
-    public float Width { get; } = Orientation == HexOrientation.PointyTopped
+    public float Width { get; } = Orientation == HexOrientation.FlatTopped
         ? 2 * EdgeSize
         : squareRootOfThree * EdgeSize;
 
