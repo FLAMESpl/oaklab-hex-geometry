@@ -6,7 +6,7 @@ namespace OakLab.HexGeometry.Tests.HexagonalGraphs.Loading;
 
 public static class HexagonalGraphLoader
 {
-    private record struct Node(OffsetEvenRowCoordinates Coordinates, decimal Weight);
+    private record struct Node(OffsetOddRowCoordinates Coordinates, decimal Weight);
 
     public static HexagonalGraph Load(string map)
     {
@@ -17,7 +17,7 @@ public static class HexagonalGraphLoader
 
         var nodes = lines
             .Select(ParseRow)
-            .SelectMany((x, row) => x.Select(y => new Node(new OffsetEvenRowCoordinates(y.Column, row), y.Weight)))
+            .SelectMany((x, row) => x.Select(y => new Node(new OffsetOddRowCoordinates(y.Column, row), y.Weight)))
             .ToDictionary(x => x.Coordinates, x => x.Weight);
 
         var edges = nodes
@@ -26,7 +26,7 @@ public static class HexagonalGraphLoader
                 .Select(y => (
                     start: x.Key,
                     end: y,
-                    weight: nodes.TryGetValue(x.Key, out var weight) ? (decimal?) weight : null))
+                    weight: nodes.TryGetValue(y, out var weight) ? (decimal?) weight : null))
                 .Where(y => y.weight is not null)
                 .Select(y => new HexagonalGraphEdge(y.start, y.end, y.weight!.Value)))
             .ToHashSet();
